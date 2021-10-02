@@ -173,7 +173,7 @@ public class VoucherController {
 
 	@PostMapping("/signUp")
 	public ResponseEntity signUp(@RequestBody UserCred userCred) {
-		try {
+		// try {
 			UserCred userCred1 = userRepository.findUserByUsername(userCred.getUsername());
 			if (userCred1 == null) {
 
@@ -183,9 +183,9 @@ public class VoucherController {
 			} else{
 				return new ResponseEntity("Already Exists", HttpStatus.BAD_REQUEST);
 			}
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		// } catch (Exception e) {
+		// 	return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		// }
 	}
 
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
