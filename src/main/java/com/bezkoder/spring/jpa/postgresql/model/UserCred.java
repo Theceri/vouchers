@@ -34,7 +34,7 @@ public class UserCred {
         // BCryptPasswordEncoder bCryptPasswordEncoder =
         //         new BCryptPasswordEncoder(strength, new SecureRandom());
         // this.password = bCryptPasswordEncoder.encode(password);
-        this.password = password;
+        this.password = "password";
         this.email = email;
     }
 
@@ -43,7 +43,7 @@ public class UserCred {
         // BCryptPasswordEncoder bCryptPasswordEncoder =
         //         new BCryptPasswordEncoder(strength, new SecureRandom());
         // this.password = bCryptPasswordEncoder.encode(password);
-        this.password = password;
+        this.password = "password";
         this.username = username;
         this.email = email;
     }
