@@ -22,14 +22,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 @CrossOrigin("http://localhost:8081")
 @RestController
 @RequestMapping("/api")
 public class VoucherController {
 
 	private static final String SECURED_TEXT = null;
-	
+
 	@Autowired
 	VoucherRepository voucherRepository;
 
@@ -44,19 +43,20 @@ public class VoucherController {
 	@Autowired
 	private JwtUserDetailsService userDetailsService;
 
-	 @GetMapping(path="/secured")
-	    public @ResponseBody String getSecured() {
-	        System.out.println("GET successfully called on /secured resource");
-	        return SECURED_TEXT;
-	    }
+	@GetMapping(path = "/secured")
+	public @ResponseBody String getSecured() {
+		System.out.println("GET successfully called on /secured resource");
+		return SECURED_TEXT;
+	}
 
 	@GetMapping("/vouchersByName/{username}")
-	public ResponseEntity<List<Voucher>> getAllVouchers(@PathVariable("username") String username,@RequestParam(required = false) String title) {
+	public ResponseEntity<List<Voucher>> getAllVouchers(@PathVariable("username") String username,
+			@RequestParam(required = false) String title) {
 		try {
 			List<Voucher> vouchers = new ArrayList<Voucher>();
 
 			if (title == null)
-				voucherRepository.findByPublishedAndUsername(true,username).forEach(vouchers::add);
+				voucherRepository.findByPublishedAndUsername(true, username).forEach(vouchers::add);
 			else
 				voucherRepository.findByTitleContaining(title).forEach(vouchers::add);
 
@@ -83,8 +83,8 @@ public class VoucherController {
 	@PostMapping("/vouchers")
 	public ResponseEntity<Voucher> createVoucher(@RequestBody Voucher voucher) {
 		try {
-			Voucher _voucher = voucherRepository.save(new Voucher(voucher.getTitle(),
-					voucher.getAmount(), voucher.getMail(), false));
+			Voucher _voucher = voucherRepository
+					.save(new Voucher(voucher.getTitle(), voucher.getAmount(), voucher.getMail(), false));
 			return new ResponseEntity<>(_voucher, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -107,7 +107,8 @@ public class VoucherController {
 	}
 
 	@PutMapping("/activate/{id}")
-	public ResponseEntity<Voucher> getActivateVouchers(@PathVariable("id") long id, @RequestParam("username")String username) {
+	public ResponseEntity<Voucher> getActivateVouchers(@PathVariable("id") long id,
+			@RequestParam("username") String username) {
 		Optional<Voucher> voucherData = voucherRepository.findById(id);
 		if (voucherData.isPresent()) {
 			Voucher _voucher = voucherData.get();
@@ -118,7 +119,7 @@ public class VoucherController {
 			_voucher.setUsername(username);
 			return new ResponseEntity<>(voucherRepository.save(_voucher), HttpStatus.OK);
 		} else {
-			
+
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -147,7 +148,7 @@ public class VoucherController {
 	@GetMapping("/vouchers/published/{username}")
 	public ResponseEntity<List<Voucher>> findByPublished(@PathVariable("username") String username) {
 		try {
-			List<Voucher> vouchers = voucherRepository.findByPublishedAndUsername(true,username);
+			List<Voucher> vouchers = voucherRepository.findByPublishedAndUsername(true, username);
 
 			if (vouchers.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -160,10 +161,10 @@ public class VoucherController {
 
 	@PutMapping("/update")
 	public ResponseEntity updateUser(@RequestBody UserCred userCred) {
-	 	try{
+		try {
 			UserCred currentUser = userRepository.findUserByUsername(userCred.getUsername());
 
-			UserCred _userCred = userRepository.save(new UserCred(currentUser.getId(),userCred.getUsername(),
+			UserCred _userCred = userRepository.save(new UserCred(currentUser.getId(), userCred.getUsername(),
 					userCred.getPassword(), userCred.getEmail()));
 			return new ResponseEntity(_userCred, HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -174,17 +175,17 @@ public class VoucherController {
 	@PostMapping("/signUp")
 	public ResponseEntity signUp(@RequestBody UserCred userCred) {
 		// try {
-			UserCred userCred1 = userRepository.findUserByUsername(userCred.getUsername());
-			if (userCred1 == null) {
+		UserCred userCred1 = userRepository.findUserByUsername(userCred.getUsername());
+		if (userCred1 == null) {
 
-				UserCred _userCred = userRepository.save(new UserCred(userCred.getUsername(),
-						userCred.getPassword(), userCred.getEmail()));
-				return new ResponseEntity(_userCred, HttpStatus.CREATED);
-			} else{
-				return new ResponseEntity("Already Exists", HttpStatus.BAD_REQUEST);
-			}
+			UserCred _userCred = userRepository
+					.save(new UserCred(userCred.getUsername(), userCred.getPassword(), userCred.getEmail()));
+			return new ResponseEntity(_userCred, HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity("Already Exists", HttpStatus.BAD_REQUEST);
+		}
 		// } catch (Exception e) {
-		// 	return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		// return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		// }
 	}
 
@@ -192,8 +193,7 @@ public class VoucherController {
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
 		authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-		final UserDetails userDetails = userDetailsService
-				.loadUserByUsername(authenticationRequest.getUsername());
+		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 		final String token = jwtTokenUtil.generateToken(userDetails);
 
 		return ResponseEntity.ok(new JwtResponse(token));

@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -37,9 +37,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//    return new BCryptPasswordEncoder();
+//    }
+    
     @Bean
-    public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder(){
+        return new PasswordEnconderTest();
     }
 
     @Bean
@@ -55,7 +60,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // dont authenticate this particular request
         .authorizeRequests().antMatchers("/api/authenticate").permitAll().and()
                 .authorizeRequests()
-                .antMatchers("/api/signUp").permitAll().
+                .antMatchers("/api/signUp",
+                		"/v2/api-docs",
+                        "/configuration/ui",
+                        "/swagger-resources/**",
+                        "/configuration/security",
+                        "/swagger-ui.html",
+                        "/webjars/**").permitAll().
 
         // all other requests need to be authenticated
         anyRequest().authenticated().and().

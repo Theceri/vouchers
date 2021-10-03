@@ -1,9 +1,6 @@
 package com.bezkoder.spring.jpa.postgresql.model;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import javax.persistence.*;
-import java.security.SecureRandom;
 
 @Entity
 @Table(name = "t_user")
@@ -30,18 +27,14 @@ public class UserCred {
     public UserCred(long id, String username, String password, String email) {
         this.id = id;
         this.username = username;
-        int strength = 10;
-        BCryptPasswordEncoder bCryptPasswordEncoder =
-                new BCryptPasswordEncoder(strength, new SecureRandom());
-        this.password = bCryptPasswordEncoder.encode("password");
+        //        this.password = bCryptPasswordEncoder.encode(password);
+        this.password = password;
         this.email = email;
     }
 
     public UserCred(String username, String password, String email) {
-        int strength = 10;
-        BCryptPasswordEncoder bCryptPasswordEncoder =
-                new BCryptPasswordEncoder(strength, new SecureRandom());
-        this.password = bCryptPasswordEncoder.encode("password");
+        //        this.password = bCryptPasswordEncoder.encode(password);
+        this.password = password;
         this.username = username;
         this.email = email;
     }
