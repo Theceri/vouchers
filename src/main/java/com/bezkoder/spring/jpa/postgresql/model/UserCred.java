@@ -31,19 +31,17 @@ public class UserCred {
         this.id = id;
         this.username = username;
         int strength = 10;
-        // BCryptPasswordEncoder bCryptPasswordEncoder =
-        //         new BCryptPasswordEncoder(strength, new SecureRandom());
-        // this.password = bCryptPasswordEncoder.encode(password);
-        this.password = "password";
+        BCryptPasswordEncoder bCryptPasswordEncoder =
+                new BCryptPasswordEncoder(strength, new SecureRandom());
+        this.password = bCryptPasswordEncoder.encode("password");
         this.email = email;
     }
 
     public UserCred(String username, String password, String email) {
         int strength = 10;
-        // BCryptPasswordEncoder bCryptPasswordEncoder =
-        //         new BCryptPasswordEncoder(strength, new SecureRandom());
-        // this.password = bCryptPasswordEncoder.encode(password);
-        this.password = "password";
+        BCryptPasswordEncoder bCryptPasswordEncoder =
+                new BCryptPasswordEncoder(strength, new SecureRandom());
+        this.password = bCryptPasswordEncoder.encode("password");
         this.username = username;
         this.email = email;
     }
